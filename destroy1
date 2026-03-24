@@ -1,0 +1,497 @@
+jh@out:~/Documents/aws/aws-eks-project$ terraform destroy
+aws_vpc.eks_vpc: Refreshing state... [id=vpc-0b2952b7bf8171a3c]
+aws_ecr_repository.api: Refreshing state... [id=my-k8s-api]
+aws_iam_role.node_role: Refreshing state... [id=eks-node-role]
+aws_iam_role.eks_cluster_role: Refreshing state... [id=eks-cluster-role]
+aws_internet_gateway.igw: Refreshing state... [id=igw-002a227b7d7b824b9]
+aws_subnet.subnet_1: Refreshing state... [id=subnet-00c98f64cea5c2c45]
+aws_subnet.subnet_2: Refreshing state... [id=subnet-075de7e3b677f31ca]
+aws_route_table.rt: Refreshing state... [id=rtb-01107eabeb2f26551]
+aws_route_table_association.b: Refreshing state... [id=rtbassoc-08a02eabc39eb42c0]
+aws_route_table_association.a: Refreshing state... [id=rtbassoc-076bbd51cf4355e9a]
+aws_iam_role_policy_attachment.cluster_policy: Refreshing state... [id=eks-cluster-role-20260324010711803600000001]
+aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly: Refreshing state... [id=eks-node-role-20260324014957442700000002]
+aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy: Refreshing state... [id=eks-node-role-20260324014957204400000001]
+aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy: Refreshing state... [id=eks-node-role-20260324014957684900000003]
+aws_eks_cluster.my_eks: Refreshing state... [id=portfolio-cluster]
+aws_eks_node_group.main: Refreshing state... [id=portfolio-cluster:portfolio-nodes]
+
+Terraform used the selected providers to generate the following execution plan. Resource
+actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_ecr_repository.api will be destroyed
+  - resource "aws_ecr_repository" "api" {
+      - arn                  = "arn:aws:ecr:ap-northeast-2:604048704500:repository/my-k8s-api" -> null
+      - force_delete         = true -> null
+      - id                   = "my-k8s-api" -> null
+      - image_tag_mutability = "MUTABLE" -> null
+      - name                 = "my-k8s-api" -> null
+      - registry_id          = "604048704500" -> null
+      - repository_url       = "604048704500.dkr.ecr.ap-northeast-2.amazonaws.com/my-k8s-api" -> null
+      - tags                 = {} -> null
+      - tags_all             = {} -> null
+
+      - encryption_configuration {
+          - encryption_type = "AES256" -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - image_scanning_configuration {
+          - scan_on_push = false -> null
+        }
+    }
+
+  # aws_eks_cluster.my_eks will be destroyed
+  - resource "aws_eks_cluster" "my_eks" {
+      - arn                           = "arn:aws:eks:ap-northeast-2:604048704500:cluster/portfolio-cluster" -> null
+      - bootstrap_self_managed_addons = true -> null
+      - certificate_authority         = [
+          - {
+              - data = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJZExUSGJmQlhqcWN3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TmpBek1qUXdNVEEzTkRSYUZ3MHpOakF6TWpFd01URXlORFJhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURFOFdXUzlObkF6djVtWWQ3RXB0akk5SDI1UWt4eWRHNENZZ1BlSlBIL1ZEQ3kwdDhVdnVZdkJqdDAKTkxkWWlSVXUya2hDQ3Q5TVA5MlVXdFVzQTBlSUpTQ1pNMVBBOGpIWVBkdTdaSnljMHlIeFZDbkcxSTV6dkVvcgpORkpkQk02ZzRMbXUxSExMeGlqQmR1SnFrNXpBZWhBZ3pNVkQxODJjMTlXYkFFWVhVVjBncjh6YjBCcVRBRURjCnJYNlJGY2tQSlIrbXYxRXBPUEV5S0tETWU5MDcrTnQ2cXBhR05VMjBXTE1zUjgvc2pvU21PaVFrWk1xSTcwbmQKQWwwZ1NjLzdaVmNpa0VCWlArQjAxSWNraVlaK3JvRkZsbkliWnRiYWRYSjlOWDZ6Q3V1dHpmTk5NU0RkdVdSSwpQWFFoK2ZwcGZpb0ZXc2ZVSU5id3RDSm1NS3J2QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJSYlp1c2wvcXUwWjQ0ZFZXSml3Rm1ZWlUrWFJ6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQVgyeTdZTmdPRgplZ2FXa0djZzNSY0lSK2RuOGdncFIvZDg1YnZKNHEyTUJvTURsNkd6RVJyY1FIa3lzbzNHWGhaOGFBNzBxRGtPClB3WEJsQ29xbldwdDBLM0xCT0RtN3kxNUdiSlorZVJyMlhKTVVoUnRKSkJWQmJwamVUSEZyWm1IaUlobWZUZ3IKUUtMTkl0dE4xYW5XMllRRWFmdUtuU2c2dmtVaE01UTh6T0Qyc29MaXhaalc1RWM2c2g4Y0ZEUGdMMEM5WlFiWApUVDE2RjhhZTF2SUVrL29RV1pLZlh0bklaUHlTajQwNCt3S0lyendrMkx6bUYvZ015T2IrV2ZzK2VnVXJabVFqCnVFRVVkeXNpRDJ5cHJoOG9rSHhjaDh2UDhBbU1BZ2FFYzVkSFVnNXN4RFlRUTkycGx4dTNsdXpwUTNnakdMQkUKNzVqcmg1VVJLS2JyCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+            },
+        ] -> null
+      - created_at                    = "2026-03-24T01:07:40Z" -> null
+      - enabled_cluster_log_types     = [] -> null
+      - endpoint                      = "https://EC5C04B249C79BD6C4329DB333E407D2.gr7.ap-northeast-2.eks.amazonaws.com" -> null
+      - id                            = "portfolio-cluster" -> null
+      - identity                      = [
+          - {
+              - oidc = [
+                  - {
+                      - issuer = "https://oidc.eks.ap-northeast-2.amazonaws.com/id/EC5C04B249C79BD6C4329DB333E407D2"
+                    },
+                ]
+            },
+        ] -> null
+      - name                          = "portfolio-cluster" -> null
+      - platform_version              = "eks.8" -> null
+      - role_arn                      = "arn:aws:iam::604048704500:role/eks-cluster-role" -> null
+      - status                        = "ACTIVE" -> null
+      - tags                          = {} -> null
+      - tags_all                      = {} -> null
+      - version                       = "1.35" -> null
+
+      - access_config {
+          - authentication_mode                         = "CONFIG_MAP" -> null
+          - bootstrap_cluster_creator_admin_permissions = true -> null
+        }
+
+      - kubernetes_network_config {
+          - ip_family         = "ipv4" -> null
+          - service_ipv4_cidr = "172.20.0.0/16" -> null
+            # (1 unchanged attribute hidden)
+
+          - elastic_load_balancing {
+              - enabled = false -> null
+            }
+        }
+
+      - upgrade_policy {
+          - support_type = "EXTENDED" -> null
+        }
+
+      - vpc_config {
+          - cluster_security_group_id = "sg-0e2eeed4d0974cae4" -> null
+          - endpoint_private_access   = false -> null
+          - endpoint_public_access    = true -> null
+          - public_access_cidrs       = [
+              - "0.0.0.0/0",
+            ] -> null
+          - security_group_ids        = [] -> null
+          - subnet_ids                = [
+              - "subnet-00c98f64cea5c2c45",
+              - "subnet-075de7e3b677f31ca",
+            ] -> null
+          - vpc_id                    = "vpc-0b2952b7bf8171a3c" -> null
+        }
+    }
+
+  # aws_eks_node_group.main will be destroyed
+  - resource "aws_eks_node_group" "main" {
+      - ami_type               = "AL2023_x86_64_STANDARD" -> null
+      - arn                    = "arn:aws:eks:ap-northeast-2:604048704500:nodegroup/portfolio-cluster/portfolio-nodes/c2ce8ec4-664f-38b4-f0ae-24986bd5df74" -> null
+      - capacity_type          = "ON_DEMAND" -> null
+      - cluster_name           = "portfolio-cluster" -> null
+      - disk_size              = 20 -> null
+      - id                     = "portfolio-cluster:portfolio-nodes" -> null
+      - instance_types         = [
+          - "t3.micro",
+        ] -> null
+      - labels                 = {} -> null
+      - node_group_name        = "portfolio-nodes" -> null
+      - node_role_arn          = "arn:aws:iam::604048704500:role/eks-node-role" -> null
+      - release_version        = "1.35.2-20260317" -> null
+      - resources              = [
+          - {
+              - autoscaling_groups              = [
+                  - {
+                      - name = "eks-portfolio-nodes-c2ce8ec4-664f-38b4-f0ae-24986bd5df74"
+                    },
+                ]
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - status                 = "ACTIVE" -> null
+      - subnet_ids             = [
+          - "subnet-00c98f64cea5c2c45",
+          - "subnet-075de7e3b677f31ca",
+        ] -> null
+      - tags                   = {} -> null
+      - tags_all               = {} -> null
+      - version                = "1.35" -> null
+        # (1 unchanged attribute hidden)
+
+      - scaling_config {
+          - desired_size = 1 -> null
+          - max_size     = 2 -> null
+          - min_size     = 1 -> null
+        }
+
+      - update_config {
+          - max_unavailable            = 1 -> null
+          - max_unavailable_percentage = 0 -> null
+        }
+    }
+
+  # aws_iam_role.eks_cluster_role will be destroyed
+  - resource "aws_iam_role" "eks_cluster_role" {
+      - arn                   = "arn:aws:iam::604048704500:role/eks-cluster-role" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "eks.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-03-24T01:07:10Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "eks-cluster-role" -> null
+      - managed_policy_arns   = [
+          - "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+        ] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "eks-cluster-role" -> null
+      - path                  = "/" -> null
+      - tags                  = {} -> null
+      - tags_all              = {} -> null
+      - unique_id             = "AROAYZJA3YP2HZFBIO2LQ" -> null
+        # (3 unchanged attributes hidden)
+    }
+
+  # aws_iam_role.node_role will be destroyed
+  - resource "aws_iam_role" "node_role" {
+      - arn                   = "arn:aws:iam::604048704500:role/eks-node-role" -> null
+      - assume_role_policy    = jsonencode(
+            {
+              - Statement = [
+                  - {
+                      - Action    = "sts:AssumeRole"
+                      - Effect    = "Allow"
+                      - Principal = {
+                          - Service = "ec2.amazonaws.com"
+                        }
+                    },
+                ]
+              - Version   = "2012-10-17"
+            }
+        ) -> null
+      - create_date           = "2026-03-24T01:49:55Z" -> null
+      - force_detach_policies = false -> null
+      - id                    = "eks-node-role" -> null
+      - managed_policy_arns   = [
+          - "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+          - "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+          - "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+        ] -> null
+      - max_session_duration  = 3600 -> null
+      - name                  = "eks-node-role" -> null
+      - path                  = "/" -> null
+      - tags                  = {} -> null
+      - tags_all              = {} -> null
+      - unique_id             = "AROAYZJA3YP2HZ3GZ6QVS" -> null
+        # (3 unchanged attributes hidden)
+    }
+
+  # aws_iam_role_policy_attachment.cluster_policy will be destroyed
+  - resource "aws_iam_role_policy_attachment" "cluster_policy" {
+      - id         = "eks-cluster-role-20260324010711803600000001" -> null
+      - policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy" -> null
+      - role       = "eks-cluster-role" -> null
+    }
+
+  # aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly will be destroyed
+  - resource "aws_iam_role_policy_attachment" "node_AmazonEC2ContainerRegistryReadOnly" {
+      - id         = "eks-node-role-20260324014957442700000002" -> null
+      - policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly" -> null
+      - role       = "eks-node-role" -> null
+    }
+
+  # aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy will be destroyed
+  - resource "aws_iam_role_policy_attachment" "node_AmazonEKSWorkerNodePolicy" {
+      - id         = "eks-node-role-20260324014957684900000003" -> null
+      - policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy" -> null
+      - role       = "eks-node-role" -> null
+    }
+
+  # aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy will be destroyed
+  - resource "aws_iam_role_policy_attachment" "node_AmazonEKS_CNI_Policy" {
+      - id         = "eks-node-role-20260324014957204400000001" -> null
+      - policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy" -> null
+      - role       = "eks-node-role" -> null
+    }
+
+  # aws_internet_gateway.igw will be destroyed
+  - resource "aws_internet_gateway" "igw" {
+      - arn      = "arn:aws:ec2:ap-northeast-2:604048704500:internet-gateway/igw-002a227b7d7b824b9" -> null
+      - id       = "igw-002a227b7d7b824b9" -> null
+      - owner_id = "604048704500" -> null
+      - tags     = {} -> null
+      - tags_all = {} -> null
+      - vpc_id   = "vpc-0b2952b7bf8171a3c" -> null
+    }
+
+  # aws_route_table.rt will be destroyed
+  - resource "aws_route_table" "rt" {
+      - arn              = "arn:aws:ec2:ap-northeast-2:604048704500:route-table/rtb-01107eabeb2f26551" -> null
+      - id               = "rtb-01107eabeb2f26551" -> null
+      - owner_id         = "604048704500" -> null
+      - propagating_vgws = [] -> null
+      - route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-002a227b7d7b824b9"
+                # (11 unchanged attributes hidden)
+            },
+        ] -> null
+      - tags             = {} -> null
+      - tags_all         = {} -> null
+      - vpc_id           = "vpc-0b2952b7bf8171a3c" -> null
+    }
+
+  # aws_route_table_association.a will be destroyed
+  - resource "aws_route_table_association" "a" {
+      - id             = "rtbassoc-076bbd51cf4355e9a" -> null
+      - route_table_id = "rtb-01107eabeb2f26551" -> null
+      - subnet_id      = "subnet-00c98f64cea5c2c45" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_route_table_association.b will be destroyed
+  - resource "aws_route_table_association" "b" {
+      - id             = "rtbassoc-08a02eabc39eb42c0" -> null
+      - route_table_id = "rtb-01107eabeb2f26551" -> null
+      - subnet_id      = "subnet-075de7e3b677f31ca" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.subnet_1 will be destroyed
+  - resource "aws_subnet" "subnet_1" {
+      - arn                                            = "arn:aws:ec2:ap-northeast-2:604048704500:subnet/subnet-00c98f64cea5c2c45" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "ap-northeast-2a" -> null
+      - availability_zone_id                           = "apne2-az1" -> null
+      - cidr_block                                     = "10.0.1.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-00c98f64cea5c2c45" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "604048704500" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "eks-subnet-1"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "eks-subnet-1"
+        } -> null
+      - vpc_id                                         = "vpc-0b2952b7bf8171a3c" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_subnet.subnet_2 will be destroyed
+  - resource "aws_subnet" "subnet_2" {
+      - arn                                            = "arn:aws:ec2:ap-northeast-2:604048704500:subnet/subnet-075de7e3b677f31ca" -> null
+      - assign_ipv6_address_on_creation                = false -> null
+      - availability_zone                              = "ap-northeast-2c" -> null
+      - availability_zone_id                           = "apne2-az3" -> null
+      - cidr_block                                     = "10.0.2.0/24" -> null
+      - enable_dns64                                   = false -> null
+      - enable_lni_at_device_index                     = 0 -> null
+      - enable_resource_name_dns_a_record_on_launch    = false -> null
+      - enable_resource_name_dns_aaaa_record_on_launch = false -> null
+      - id                                             = "subnet-075de7e3b677f31ca" -> null
+      - ipv6_native                                    = false -> null
+      - map_customer_owned_ip_on_launch                = false -> null
+      - map_public_ip_on_launch                        = true -> null
+      - owner_id                                       = "604048704500" -> null
+      - private_dns_hostname_type_on_launch            = "ip-name" -> null
+      - tags                                           = {
+          - "Name" = "eks-subnet-2"
+        } -> null
+      - tags_all                                       = {
+          - "Name" = "eks-subnet-2"
+        } -> null
+      - vpc_id                                         = "vpc-0b2952b7bf8171a3c" -> null
+        # (4 unchanged attributes hidden)
+    }
+
+  # aws_vpc.eks_vpc will be destroyed
+  - resource "aws_vpc" "eks_vpc" {
+      - arn                                  = "arn:aws:ec2:ap-northeast-2:604048704500:vpc/vpc-0b2952b7bf8171a3c" -> null
+      - assign_generated_ipv6_cidr_block     = false -> null
+      - cidr_block                           = "10.0.0.0/16" -> null
+      - default_network_acl_id               = "acl-0eb65058646bd28b2" -> null
+      - default_route_table_id               = "rtb-04b6e180e19fc78c3" -> null
+      - default_security_group_id            = "sg-022b22fab506c9e0b" -> null
+      - dhcp_options_id                      = "dopt-0fc073654cd20febc" -> null
+      - enable_dns_hostnames                 = true -> null
+      - enable_dns_support                   = true -> null
+      - enable_network_address_usage_metrics = false -> null
+      - id                                   = "vpc-0b2952b7bf8171a3c" -> null
+      - instance_tenancy                     = "default" -> null
+      - ipv6_netmask_length                  = 0 -> null
+      - main_route_table_id                  = "rtb-04b6e180e19fc78c3" -> null
+      - owner_id                             = "604048704500" -> null
+      - tags                                 = {
+          - "Name" = "portfolio-eks-vpc"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "portfolio-eks-vpc"
+        } -> null
+        # (4 unchanged attributes hidden)
+    }
+
+Plan: 0 to add, 0 to change, 16 to destroy.
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+aws_route_table_association.a: Destroying... [id=rtbassoc-076bbd51cf4355e9a]
+aws_route_table_association.b: Destroying... [id=rtbassoc-08a02eabc39eb42c0]
+aws_ecr_repository.api: Destroying... [id=my-k8s-api]
+aws_eks_node_group.main: Destroying... [id=portfolio-cluster:portfolio-nodes]
+aws_ecr_repository.api: Destruction complete after 0s
+aws_route_table_association.b: Destruction complete after 0s
+aws_route_table_association.a: Destruction complete after 0s
+aws_route_table.rt: Destroying... [id=rtb-01107eabeb2f26551]
+aws_route_table.rt: Destruction complete after 1s
+aws_internet_gateway.igw: Destroying... [id=igw-002a227b7d7b824b9]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 00m10s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 00m10s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 00m20s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 00m20s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 00m30s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 00m30s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 00m40s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 00m40s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 00m50s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 00m50s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 01m00s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 01m00s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 01m10s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 01m10s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 01m20s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 01m20s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 01m30s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 01m30s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 01m40s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 01m40s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 01m50s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 01m50s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 02m00s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 02m00s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 02m10s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 02m10s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 02m20s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 02m20s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 02m30s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 02m30s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 02m40s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 02m40s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 02m50s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 02m50s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 03m00s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 03m00s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 03m10s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 03m10s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 03m20s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 03m20s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 03m30s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 03m30s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 03m40s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 03m40s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 03m50s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 03m50s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 04m00s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 04m00s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 04m10s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 04m10s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 04m20s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 04m20s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 04m30s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 04m30s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 04m40s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 04m40s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 04m50s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 04m50s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 05m00s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 05m00s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 05m10s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 05m10s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 05m20s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 05m20s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 05m30s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 05m30s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 05m40s elapsed]
+aws_internet_gateway.igw: Still destroying... [id=igw-002a227b7d7b824b9, 05m40s elapsed]
+aws_internet_gateway.igw: Destruction complete after 5m43s
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 05m50s elapsed]
+aws_eks_node_group.main: Still destroying... [id=portfolio-cluster:portfolio-nodes, 06m00s elapsed]
+aws_eks_node_group.main: Destruction complete after 6m9s
+aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy: Destroying... [id=eks-node-role-20260324014957684900000003]
+aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy: Destroying... [id=eks-node-role-20260324014957204400000001]
+aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly: Destroying... [id=eks-node-role-20260324014957442700000002]
+aws_eks_cluster.my_eks: Destroying... [id=portfolio-cluster]
+aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly: Destruction complete after 0s
+aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy: Destruction complete after 1s
+aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy: Destruction complete after 1s
+aws_iam_role.node_role: Destroying... [id=eks-node-role]
+aws_iam_role.node_role: Destruction complete after 0s
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 00m10s elapsed]
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 00m20s elapsed]
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 00m30s elapsed]
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 00m40s elapsed]
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 00m50s elapsed]
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 01m00s elapsed]
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 01m10s elapsed]
+aws_eks_cluster.my_eks: Still destroying... [id=portfolio-cluster, 01m20s elapsed]
+aws_eks_cluster.my_eks: Destruction complete after 1m27s
+aws_iam_role_policy_attachment.cluster_policy: Destroying... [id=eks-cluster-role-20260324010711803600000001]
+aws_subnet.subnet_2: Destroying... [id=subnet-075de7e3b677f31ca]
+aws_subnet.subnet_1: Destroying... [id=subnet-00c98f64cea5c2c45]
+aws_subnet.subnet_2: Destruction complete after 1s
+aws_subnet.subnet_1: Destruction complete after 1s
+aws_vpc.eks_vpc: Destroying... [id=vpc-0b2952b7bf8171a3c]
+aws_iam_role_policy_attachment.cluster_policy: Destruction complete after 1s
+aws_iam_role.eks_cluster_role: Destroying... [id=eks-cluster-role]
+aws_vpc.eks_vpc: Destruction complete after 0s
+aws_iam_role.eks_cluster_role: Destruction complete after 1s
+
+Destroy complete! Resources: 16 destroyed.
+
