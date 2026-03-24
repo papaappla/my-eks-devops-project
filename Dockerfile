@@ -1,8 +1,11 @@
-# 1. 가벼운 Python 이미지 사용
-FROM python:3.9-slim
+# 기존: FROM python:3.9-slim
+# 변경:
+FROM python:3.11-slim
 
-# 2. 작업 디렉토리 설정
 WORKDIR /app
+
+# (이하 동일)
+COPY requirements.txt .
 
 # 3. 필요한 라이브러리 설치
 COPY requirements.txt .
