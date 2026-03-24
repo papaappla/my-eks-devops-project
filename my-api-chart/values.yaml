@@ -1,0 +1,85 @@
+replicaCount: 1
+
+image:
+  repository: 604048704500.dkr.ecr.ap-northeast-2.amazonaws.com/my-k8s-api # ECR 주소
+  pullPolicy: IfNotPresent
+  tag: "latest" # 또는 GitHub Actions에서 생성할 버전 태그
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80       # 외부에서 서비스로 접속할 포트
+  targetPort: 8000 # 실제 컨테이너(Python)가 리스닝하는 포트 (추가해주면 좋습니다)
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+  - name: gateway
+    sectionName: http
+  hostnames:
+  - chart-example.local
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /headers
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /pods # API가 응답하는 경로로 수정
+    port: 8000  # Python 앱 포트
+readinessProbe:
+  httpGet:
+    path: /pods
+    port: 8000
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,46 @@
+name: Build and Deploy to EKS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 1. AWS 자격 증명 설정
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    # 2. Amazon ECR 로그인
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    # 3. Docker 이미지 빌드 및 ECR 푸시
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.registry }}
+        ECR_REPOSITORY: my-k8s-api
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    # 4. EKS 접속 설정 (kubectl 명령 사용 가능하게 함)
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --region ap-northeast-2 --name portfolio-cluster
+
+    # 5. Helm을 이용한 배포
+    - name: Deploy with Helm
+      run: |
+        helm upgrade --install my-api ./my-api-chart \
+          --set image.repository=${{ steps.login-ecr.registry }}/my-k8s-api \
+          --set image.tag=latest

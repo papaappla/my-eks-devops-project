@@ -1,0 +1,152 @@
+jh@out:~/Documents/aws/aws-eks-project$ terraform apply
+aws_iam_role.eks_cluster_role: Refreshing state... [id=eks-cluster-role]
+aws_vpc.eks_vpc: Refreshing state... [id=vpc-0b2952b7bf8171a3c]
+aws_internet_gateway.igw: Refreshing state... [id=igw-002a227b7d7b824b9]
+aws_subnet.subnet_1: Refreshing state... [id=subnet-00c98f64cea5c2c45]
+aws_subnet.subnet_2: Refreshing state... [id=subnet-075de7e3b677f31ca]
+aws_route_table.rt: Refreshing state... [id=rtb-01107eabeb2f26551]
+aws_route_table_association.a: Refreshing state... [id=rtbassoc-076bbd51cf4355e9a]
+aws_route_table_association.b: Refreshing state... [id=rtbassoc-08a02eabc39eb42c0]
+aws_iam_role_policy_attachment.cluster_policy: Refreshing state... [id=eks-cluster-role-20260324010711803600000001]
+aws_eks_cluster.my_eks: Refreshing state... [id=portfolio-cluster]
+
+Terraform used the selected providers to generate the following execution plan.
+Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_ecr_repository.api will be created
+  + resource "aws_ecr_repository" "api" {
+      + arn                  = (known after apply)
+      + force_delete         = true
+      + id                   = (known after apply)
+      + image_tag_mutability = "MUTABLE"
+      + name                 = "my-k8s-api"
+      + registry_id          = (known after apply)
+      + repository_url       = (known after apply)
+      + tags_all             = (known after apply)
+    }
+
+  # aws_eks_node_group.main will be created
+  + resource "aws_eks_node_group" "main" {
+      + ami_type               = (known after apply)
+      + arn                    = (known after apply)
+      + capacity_type          = (known after apply)
+      + cluster_name           = "portfolio-cluster"
+      + disk_size              = (known after apply)
+      + id                     = (known after apply)
+      + instance_types         = [
+          + "t3.micro",
+        ]
+      + node_group_name        = "portfolio-nodes"
+      + node_group_name_prefix = (known after apply)
+      + node_role_arn          = (known after apply)
+      + release_version        = (known after apply)
+      + resources              = (known after apply)
+      + status                 = (known after apply)
+      + subnet_ids             = [
+          + "subnet-00c98f64cea5c2c45",
+          + "subnet-075de7e3b677f31ca",
+        ]
+      + tags_all               = (known after apply)
+      + version                = (known after apply)
+
+      + node_repair_config (known after apply)
+
+      + scaling_config {
+          + desired_size = 1
+          + max_size     = 2
+          + min_size     = 1
+        }
+
+      + update_config (known after apply)
+    }
+
+  # aws_iam_role.node_role will be created
+  + resource "aws_iam_role" "node_role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "ec2.amazonaws.com"
+                        }
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "eks-node-role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly will be created
+  + resource "aws_iam_role_policy_attachment" "node_AmazonEC2ContainerRegistryReadOnly" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+      + role       = "eks-node-role"
+    }
+
+  # aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy will be created
+  + resource "aws_iam_role_policy_attachment" "node_AmazonEKSWorkerNodePolicy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+      + role       = "eks-node-role"
+    }
+
+  # aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy will be created
+  + resource "aws_iam_role_policy_attachment" "node_AmazonEKS_CNI_Policy" {
+      + id         = (known after apply)
+      + policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+      + role       = "eks-node-role"
+    }
+
+Plan: 6 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+aws_iam_role.node_role: Creating...
+aws_ecr_repository.api: Creating...
+aws_ecr_repository.api: Creation complete after 1s [id=my-k8s-api]
+aws_iam_role.node_role: Creation complete after 2s [id=eks-node-role]
+aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy: Creating...
+aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy: Creating...
+aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly: Creating...
+aws_iam_role_policy_attachment.node_AmazonEC2ContainerRegistryReadOnly: Creation complete after 1s [id=eks-node-role-20260324014957442700000002]
+aws_iam_role_policy_attachment.node_AmazonEKS_CNI_Policy: Creation complete after 1s [id=eks-node-role-20260324014957204400000001]
+aws_iam_role_policy_attachment.node_AmazonEKSWorkerNodePolicy: Creation complete after 1s [id=eks-node-role-20260324014957684900000003]
+aws_eks_node_group.main: Creating...
+aws_eks_node_group.main: Still creating... [00m10s elapsed]
+aws_eks_node_group.main: Still creating... [00m20s elapsed]
+aws_eks_node_group.main: Still creating... [00m30s elapsed]
+aws_eks_node_group.main: Still creating... [00m40s elapsed]
+aws_eks_node_group.main: Still creating... [00m50s elapsed]
+aws_eks_node_group.main: Still creating... [01m00s elapsed]
+aws_eks_node_group.main: Still creating... [01m10s elapsed]
+aws_eks_node_group.main: Still creating... [01m20s elapsed]
+aws_eks_node_group.main: Still creating... [01m30s elapsed]
+aws_eks_node_group.main: Still creating... [01m40s elapsed]
+aws_eks_node_group.main: Still creating... [01m50s elapsed]
+aws_eks_node_group.main: Still creating... [02m00s elapsed]
+aws_eks_node_group.main: Creation complete after 2m9s [id=portfolio-cluster:portfolio-nodes]
+
+Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
+
