@@ -5,8 +5,7 @@
 ---
 
 ## 🏗️ Architecture
-![Architecture Diagram](https://img.shields.io/badge/Architecture-EKS--Standard-orange)
-*(추후 VPC-EKS-ECR-CI/CD 흐름도를 삽입할 예정입니다)*
+![Architecture Diagram](image.png)
 
 - **Cloud Platform**: AWS (EKS, ECR, VPC, IAM)
 - **Infrastructure**: Terraform (Modularized IaC)
