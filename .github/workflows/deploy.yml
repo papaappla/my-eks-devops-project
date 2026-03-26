@@ -3,6 +3,13 @@ name: Build and Deploy to EKS
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - '디버깅3단계'
+      - '진행상황'
+      - 'plan'
+      - 'apply*'
+      - 'destroy*'
 
 jobs:
   deploy:
