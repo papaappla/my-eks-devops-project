@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths-ignore:
       - 'README.md'
+      - 'CHECKLIST.md'
       - '디버깅3단계'
       - '진행상황'
       - 'plan'

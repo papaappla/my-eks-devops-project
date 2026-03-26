@@ -1,59 +1,81 @@
-# ✅ Job Requirement Match & Project Checklist
+# ✅ Comprehensive Technical Gap & Roadmap Checklist
 
-본 프로젝트가 주요 기업(토스, 넥슨, 헤리트 등)의 채용 공고 요구사항과 얼마나 일치하는지 점검한 체크리스트입니다.
+본 프로젝트를 기반으로 **금융/플랫폼**, **AI 서비스**, **전통적 인프라/IoT** 등 다양한 기술 선도 기업의 요구사항에 도달하기 위한 기술적 공백 점검표입니다.
 
 ---
 
-## 🏗️ 1. Cloud Infrastructure (AWS/IaC)
-| 상태 | 항목 | 상세 내용 | 관련 파일 |
+## 🏗️ 1. Cloud Infrastructure & Platform (Multi-Cloud/IaC)
+| 상태 | 항목 | 상세 내용 및 기술적 요구사항 | 관련 파일 |
 | :---: | :--- | :--- | :--- |
-| ✅ | **AWS EKS 운영** | EKS 클러스터 및 노드 그룹 구축 및 운영 | `eks.tf` |
-| ✅ | **Terraform 기반 IaC** | VPC, Subnet, IGW 등 인프라 전체 코드화 | `vpc.tf`, `eks.tf` |
-| ✅ | **VPC/Network 설계** | 멀티 AZ 서브넷 배치 및 라우팅 테이블 구성 | `vpc.tf` |
-| ✅ | **IAM/RBAC 권한 관리** | 최소 권한 원칙 기반 IAM Role 및 K8s RBAC 적용 | `rbac.yaml`, `eks.tf` |
-| ⬜ | **Database 운영** | RDS, Redis 구축 및 운영 경험 (Next Step) | - |
-| ⬜ | **멀티 클라우드/계정** | NCP 연동 또는 AWS Multi-Account 환경 (Next Step) | - |
+| ✅ | **AWS EKS 운영** | 클러스터/노드 그룹 구축, 장애 대응 및 온콜(On-call) 핸들링 | `eks.tf` |
+| ✅ | **Terraform IaC** | HCL 기반 인프라 표준화 및 재사용 가능한 모듈 설계 | `vpc.tf`, `eks.tf` |
+| ⬜ | **ECS 기반 서비스** | ECS Cluster, Task Definition, Service 운영 및 관리 | - |
+| ⬜ | **Multi-Cloud (NCP)** | NCP(Naver Cloud) 인프라 설계 및 AWS와의 멀티 클라우드 연동 | - |
+| ⬜ | **OpenStack** | IaaS 플랫폼 자체의 설계/개발 및 OpenStack 기반 인프라 운영 | - |
+| ⬜ | **Multi-Account** | Organizations 기반 멀티 AWS 계정 표준화 및 운영 정책 수립 | - |
+| ✅ | **Core Resources** | **EC2, S3, RDS, Redis** 등 핵심 리소스 운영 및 최적화 | `eks.tf` |
+| ⬜ | **FinOps** | 리소스 분석을 통한 비용 최적화 및 FinOps 정책 적용 | - |
 
 ---
 
-## 🚀 2. CI/CD & DevOps Automation
-| 상태 | 항목 | 상세 내용 | 관련 파일 |
+## 💻 2. Systems Programming & Inhouse Development
+| 상태 | 항목 | 상세 내용 및 기술적 요구사항 | 관련 파일 |
 | :---: | :--- | :--- | :--- |
-| ✅ | **GitHub Actions** | Build -> Push -> Deploy 전 과정 자동화 파이프라인 | `.github/workflows/` |
-| ✅ | **Helm Charts** | K8s 리소스 패키징 및 환경 변수 주입 자동화 | `my-api-chart/` |
-| ✅ | **Containerization** | Docker를 활용한 어플리케이션 이미지 최적화 | `Dockerfile` |
-| ⬜ | **ArgoCD (GitOps)** | Declarative CD 환경 구성 (Next Step) | - |
-| ⬜ | **Observability** | Prometheus, Grafana, ELK 기반 모니터링 (Next Step) | - |
+| ✅ | **Python 숙련도** | FastAPI 비동기 프로그래밍 및 운영 자동화 툴 개발 | `main.py` |
+| ⬜ | **Golang/C 숙련도** | 고성능/저수준 시스템 프로그래밍 및 오픈소스 기능 확장 | - |
+| ⬜ | **Inhouse Dev** | 오픈소스를 기반으로 사내 환경에 맞춘 기능 확장 및 성능 최적화 | - |
+| ✅ | **REST API Design** | 리소스 중심 API 설계 및 API 응답 속도 최적화 | `main.py` |
+| ⬜ | **OS/Kernel/Storage** | Linux 커널 아키텍처, 프로세스 스케줄링, 분산 스토리지(Ceph 등) 전문성 | - |
+| ⬜ | **Deep Networking** | L4/L7 LB, BGP, VXLAN, eBPF 등 클라우드 네트워크 심화 지식 | - |
 
 ---
 
-## 🐍 3. Development & Automation (Python/API)
-| 상태 | 항목 | 상세 내용 | 관련 파일 |
+## 🤖 3. AI Service Interface & UX (Frontend/Backend Integration)
+| 상태 | 항목 | 상세 내용 및 기술적 요구사항 | 관련 파일 |
 | :---: | :--- | :--- | :--- |
-| ✅ | **Python 스크립트** | K8s API 연동 및 운영 자동화 툴 개발 | `main.py` |
-| ✅ | **REST API 개발** | FastAPI 기반의 인프라 정보 조회 인터페이스 구현 | `main.py` |
-| ✅ | **YAML/Bash 활용** | 배포 Manifest 설계 및 스크립트 기반 자동화 | `deploy.yml` |
-| ⬜ | **AI Integration** | LLM 연동 및 AI DevOps Assistant 기능 (In Progress) | - |
+| ⬜ | **Real-time Interface** | **SSE, WebSocket** 기반 실시간 데이터/AI 답변 스트리밍 구현 | - |
+| ⬜ | **AI Agent Integration** | **MCP(Model Context Protocol), A2A** 연계 및 멀티 에이전트 구조 설계 | - |
+| ⬜ | **BFF Architecture** | Frontend 최적화를 위한 BFF 계층 설계 및 경량 백엔드 구현 | - |
+| ⬜ | **Bot Interface** | **Slack Bot (Slack Bolt SDK)** 기반 멀티 플랫폼 인터페이스 개발 | - |
+| ⬜ | **Admin Tool/CMS** | Context DB 관리용 웹 인터페이스 및 AI 운영 도구 설계 | - |
+| ⬜ | **UX Optimization** | 응답 지연 처리, 실패/재시도 UX 설계 및 AI 결과 시각화 | - |
 
 ---
 
-## 🛠️ 4. Problem Solving & Experience (Soft Skills)
-| 상태 | 항목 | 상세 내용 | 관련 파일 |
+## 📊 4. Data Engineering & Statistical Analysis
+| 상태 | 항목 | 상세 내용 및 기술적 요구사항 | 관련 파일 |
 | :---: | :--- | :--- | :--- |
-| ✅ | **장애 대응 및 디버깅** | InvalidImageName, RBAC 권한 오류 등 실전 해결 기록 | `디버깅3단계` |
-| ✅ | **운영 프로세스 문서화** | 인프라 구조 및 배포 절차 정리 | `README.md` |
-| ✅ | **현대화(Modernization)** | 온프레미스에서 클라우드 네이티브로의 전환 과정 | `진행상황` |
+| ⬜ | **Database Transaction** | ACID 트랜잭션의 깊은 이해 및 대규모 트래픽 동시성 제어 | - |
+| ⬜ | **SQL & Statistics** | 복잡한 쿼리 작성 및 서비스 데이터 통계/분석 (SQL 전문성) | - |
+| ✅ | **Data Collection** | 플랫폼 관리 및 상태 모니터링을 위한 데이터 수집 자동화 | `main.py` |
 
 ---
 
-## 🎯 면접 핵심 키워드 (Matching)
-- **토스**: "Cloud Native 관점의 문제 해결", "EKS 클러스터 운영", "Terraform IaC"
-- **넥슨**: "AI 활용 기반 구축", "Python 숙련도", "Kubernetes에 대한 깊은 이해"
-- **헤리트**: "데이터 수집 자동화 툴 개발", "Linux/Network 이해", "Docker/Container"
+## 🚀 5. DevOps, Security & Observability
+| 상태 | 항목 | 상세 내용 및 기술적 요구사항 | 관련 파일 |
+| :---: | :--- | :--- | :--- |
+| ✅ | **GitHub Actions** | SaaS 기반 CI/CD 구축 및 배포 환경 관리 | `.github/workflows/` |
+| ✅ | **Helm Charts** | K8s 리소스 패키징 및 선언적 배포 관리 | `my-api-chart/` |
+| ⬜ | **ArgoCD** | GitOps 기반의 선언적 지속적 배포(CD) 환경 구축 | - |
+| ⬜ | **Access Control** | **Okta, Keycloak (SSO/EAM)** 연동 및 권한 분리/접근제어 | - |
+| ⬜ | **Observability** | **Prometheus, Grafana, ELK/OpenSearch** 기반 가시성 확보 | - |
+| ⬜ | **Security Automation** | DevOps 관점의 보안 정책 수립 및 운영 자동화 | - |
 
 ---
 
-## 📈 Roadmap (Next Step)
-- [ ] **Database**: Terraform으로 `RDS(PostgreSQL)` 및 `ElastiCache(Redis)` 추가
-- [ ] **Observability**: Helm으로 `Prometheus` & `Grafana` 스택 배포 및 대시보드 구성
-- [ ] **AI Assistant**: OpenAI API 연동하여 Pod Error Log 분석 기능 추가 (넥슨 AI Hub 타겟)
+## 📈 Roadmap (Technical Gap Resolution)
+
+### 🔴 Phase 1: 플랫폼 개발 및 고수준 시스템 역량 (Infrastructure Dev)
+- [ ] **Golang/C 연마**: K8s 커스텀 컨트롤러(Operator) 개발 및 오픈소스 기여.
+- [ ] **OpenStack/IaaS 탐구**: 클라우드 플랫폼 자체의 아키텍처 분석 및 가상화 제어 실습.
+- [ ] **OS/Network 심화**: Linux 커널 파라미터 튜닝 및 eBPF 기반 네트워크 가시성 확보.
+
+### 🔵 Phase 2: AI 인터페이스 및 실시간성 (Application Dev)
+- [ ] **실시간 통신**: FastAPI SSE를 활용한 AI 스트리밍 서비스 및 Slack Bot 연동.
+- [ ] **BFF & CMS**: 프론트엔드 요구사항에 맞춰 여러 인프라 API를 취합해 전달하는 BFF 계층 구축.
+- [ ] **프로토콜 연계**: MCP, A2A 등 최신 AI 상호작용 프로토콜 연구 및 적용.
+
+### 🟢 Phase 3: 데이터 분석 및 보안/운영 최적화 (SRE/SecOps)
+- [ ] **데이터 통계**: 인프라 메트릭 데이터를 SQL로 분석하여 가용성 보고서 자동 생성.
+- [ ] **SSO 연동**: Keycloak 등을 활용한 통합 인증(EAM) 및 정교한 RBAC 시스템 구축.
+- [ ] **ArgoCD & Observability**: Helm + ArgoCD 기반 GitOps 완성 및 통합 대시보드 구축.
