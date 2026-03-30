@@ -1,13 +1,7 @@
 name: Build and Deploy to EKS
 
 on:
-  push:
-    branches: [ main ]
-    paths-ignore:
-      - 'README.md'
-      - 'docs/**'
-      - 'logs/**'
-      - 'terraform/**'
+  workflow_dispatch:
 
 jobs:
   deploy:
