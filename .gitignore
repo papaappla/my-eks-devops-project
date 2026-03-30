@@ -1,18 +1,24 @@
-# Terraform 관련 임시 파일들
-.terraform/
+# Terraform 관련 임시 파일들 (terraform/ 디렉터리 내부 포함)
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/.terraform.lock.hcl
 *.tfstate
 *.tfstate.backup
+.terraform/
 .terraform.lock.hcl
 
-# Python 관련 임시 파일들
-__pycache__/
-*.py[cod]
-*$py.class
+
+# Python 관련 임시 파일들 (app/ 디렉터리 내부 포함)
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
 venv/
 .env
 
 # 운영체제 임시 파일
 .DS_Store
 
-# 계정파일
+# 계정파일 및 기타
 chocolateabc62.txt
+docs/image.png
