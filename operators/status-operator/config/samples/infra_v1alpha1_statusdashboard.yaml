@@ -1,0 +1,9 @@
+apiVersion: infra.infra.local/v1alpha1
+kind: StatusDashboard
+metadata:
+  labels:
+    app.kubernetes.io/name: status-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: main-dashboard
+spec:
+  refreshIntervalSeconds: 10

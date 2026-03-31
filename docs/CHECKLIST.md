@@ -66,7 +66,7 @@
 ## 📈 Roadmap (Technical Gap Resolution)
 
 ### 🔴 Phase 1: 플랫폼 개발 및 고수준 시스템 역량 (Infrastructure Dev)
-- [ ] **Golang/C 연마**: K8s 커스텀 컨트롤러(Operator) 개발 및 오픈소스 기여.
+- [x] **Golang/C 연마**: K8s 커스텀 컨트롤러(Operator) 개발 및 오픈소스 기여. (Status Operator 초기화 완료)
 - [ ] **OpenStack/IaaS 탐구**: 클라우드 플랫폼 자체의 아키텍처 분석 및 가상화 제어 실습.
 - [ ] **OS/Network 심화**: Linux 커널 파라미터 튜닝 및 eBPF 기반 네트워크 가시성 확보.
 
