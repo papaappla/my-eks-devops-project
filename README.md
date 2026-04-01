@@ -9,49 +9,7 @@
 ## 🏗️ System Architecture
 
 현재 프로젝트의 아키텍처는 IaC(Terraform)로 구축된 EKS 환경 위에서 **Go 기반 오퍼레이터**와 **AI 기반 모니터링**이 결합된 형태입니다.
-
-```mermaid
-graph TD
-    subgraph "External Services"
-        GAI[Gemini 3 Flash API]
-        SLK[Slack Webhook]
-        ECR[Amazon ECR]
-    end
-
-    subgraph "GitHub Cloud"
-        GHA[GitHub Actions]
-        GHA -- "1. Build & Push" --> ECR
-        GHA -- "2. Deploy & Recovery" --> EKS
-    end
-
-    subgraph "AWS EKS (ap-northeast-2)"
-        direction TB
-        EKS["EKS Cluster (portfolio-cluster)"]
-        
-        subgraph "Monitoring Layer"
-            PROM[Prometheus]
-            GRAF[Grafana]
-        end
-        
-        subgraph "Application Layer"
-            API[FastAPI Server]
-            OPT[Status Operator (Go)]
-        end
-        
-        subgraph "AI Reporting Layer"
-            CJ[AI Reporter CronJob]
-        end
-    end
-
-    %% Flow
-    PROM -- "Collect Metrics" --> API
-    PROM -- "Collect Metrics" --> OPT
-    CJ -- "Query Data" --> PROM
-    CJ -- "Analyze Metrics" --> GAI
-    GAI -- "Generate Insight" --> CJ
-    CJ -- "Post Report" --> SLK
-    GRAF -- "Visualize" --> PROM
-```
+![Architecture Diagram](image.png)
 
 ---
 
