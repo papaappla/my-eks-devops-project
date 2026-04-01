@@ -2,10 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# 인코딩 설정 추가 (한글 처리 지원)
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
+# 인코딩 설정 강제화 (UTF-8 모드 활성화)
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 ENV PYTHONIOENCODING=utf-8
+ENV PYTHONUTF8=1
 
 # 1. 의존성 설치
 COPY requirements.txt .
