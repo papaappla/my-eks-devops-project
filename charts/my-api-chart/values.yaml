@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 604048704500.dkr.ecr.ap-northeast-2.amazonaws.com/my-k8s-api # ECR 주소
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "latest" # 또는 GitHub Actions에서 생성할 버전 태그
 imagePullSecrets: []
 nameOverride: ""
