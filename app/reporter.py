@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests
 import os
 import json
@@ -22,33 +23,33 @@ def get_prometheus_metric(query):
 
 def generate_ai_insight(cpu, mem, running, total):
     if not GEMINI_API_KEY:
-        return "Gemini API Key가 설정되지 않아 기본 메시지를 출력합니다. 현재 상태는 안정적입니다."
+        return "Gemini API Key is missing. Infrastructure is stable."
 
     try:
         client = genai.Client(api_key=GEMINI_API_KEY)
+        # 프롬프트를 영어로 구성하고 결과만 한글로 요청하여 인코딩 충돌 최소화
         prompt = f"""
-        당신은 숙련된 SRE(Site Reliability Engineer)이자 FinOps(비용 최적화) 전문가입니다. 
-        현재 EKS 클러스터는 AWS 't3.small'(2 vCPU, 2GB RAM) 인스턴스 1대로 운영 중입니다.
+        Act as a Senior SRE and FinOps expert.
+        Analyze these EKS metrics (Instance: t3.small, 2 vCPU, 2GB RAM):
+        - CPU Usage: {cpu:.2f}%
+        - Memory Usage: {mem:.2f}%
+        - Pod Status: {running} / {total} (Running/Total)
 
-        [현재 메트릭]
-        - CPU 사용률: {cpu:.2f}%
-        - 메모리 사용률: {mem:.2f}%
-        - Pod 상태: {running} / {total} (Running / Total)
-
-        [분석 요청 사항]
-        1. 시스템 건강 상태 진단 (Pod 장애 여부 등)
-        2. 비용 최적화(FinOps) 제안: 
-           - 만약 사용률이 매우 낮다면(예: CPU < 15%) 더 저렴한 't3.micro'로 낮추거나 서버를 끌 것을 권장.
-           - 사용률이 높다면(예: CPU > 70%) 인스턴스 확장(Scaling)을 제안.
-        3. 인프라 엔지니어에게 도움이 될 만한 통찰력을 한 줄로 짧고 멋지게 작성 (전문적인 말투, 이모지 포함)
+        Task:
+        1. Diagnose system health.
+        2. Provide FinOps advice (e.g., downgrade to t3.micro if CPU < 15%).
+        3. Write a 1-sentence insight in KOREAN with emojis for a Slack report.
         """
         response = client.models.generate_content(
             model="gemini-3-flash-preview", 
             contents=prompt
         )
-        return "".join([part.text for part in response.candidates[0].content.parts if part.text]).strip()
+        insight = "".join([part.text for part in response.candidates[0].content.parts if part.text]).strip()
+        return insight
     except Exception as e:
-        return f"AI 인사이트 생성 중 오류 발생: {e}"
+        # 에러 메시지도 영어로 출력하여 인코딩 에러 전파 방지
+        print(f"AI Generation Error: {str(e)}")
+        return f"AI Insight Error: {str(e)}"
 
 def generate_report():
     cpu_usage = float(get_prometheus_metric('sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate) / sum(kube_node_status_allocatable:cpu:core) * 100'))
@@ -61,17 +62,17 @@ def generate_report():
     status_emoji = "✅" if cpu_usage < 80 else "⚠️"
 
     report_text = f"""
-*🚀 [EKS AI Reporter] 인프라 자동 분석 리포트*
+*🚀 [EKS AI Reporter] Infrastructure Analysis*
 --------------------------------------------------
-*📅 분석 일시:* {now}
-*🌐 클러스터 상태:* {status_emoji} 정상 가동 중
+*📅 Date:* {now}
+*🌐 Status:* {status_emoji} Stable
 
-*📊 핵심 메트릭 요약:*
-• *CPU 사용률:* {cpu_usage:.2f}%
-• *메모리 사용률:* {mem_usage:.2f}%
-• *Pod 상태:* {running_pods} / {total_pods} (Running / Total)
+*📊 Metrics Summary:*
+• *CPU:* {cpu_usage:.2f}%
+• *Memory:* {mem_usage:.2f}%
+• *Pods:* {running_pods} / {total_pods}
 
-*🤖 AI SRE의 인사이트:*
+*🤖 AI SRE Insight:*
 "{ai_insight}"
 --------------------------------------------------
 """
@@ -79,18 +80,17 @@ def generate_report():
 
 def send_to_slack(text):
     if not SLACK_WEBHOOK_URL:
-        print("SLACK_WEBHOOK_URL이 설정되지 않아 전송을 건너뜁니다.")
+        print("SLACK_WEBHOOK_URL is missing.")
         return
     try:
         payload = {"text": text}
-        # json 파라미터를 사용하면 requests가 알아서 utf-8로 인코딩하여 전송합니다.
         response = requests.post(SLACK_WEBHOOK_URL, json=payload)
         response.raise_for_status()
     except Exception as e:
-        print(f"Slack 전송 중 오류 발생: {e}")
+        print(f"Slack Error: {str(e)}")
 
 if __name__ == "__main__":
+    print("Starting AI Infrastructure Analysis...")
     report = generate_report()
     send_to_slack(report)
-    print("Slack 보고 완료!")
-
+    print("Report Sent Successfully!")
