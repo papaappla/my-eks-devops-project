@@ -21,6 +21,10 @@ spec:
               value: "utf-8"
             - name: PYTHONUTF8
               value: "1"
+            - name: LANG
+              value: "C.UTF-8"
+            - name: LC_ALL
+              value: "C.UTF-8"
             - name: SLACK_WEBHOOK_URL
               valueFrom:
                 secretKeyRef:

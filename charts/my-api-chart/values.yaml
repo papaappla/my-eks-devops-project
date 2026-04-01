@@ -61,11 +61,11 @@ resources:
 
 livenessProbe:
   httpGet:
-    path: /pods # API가 응답하는 경로로 수정
-    port: 8000  # Python 앱 포트
+    path: /healthz
+    port: 8000
 readinessProbe:
   httpGet:
-    path: /pods
+    path: /healthz
     port: 8000
 
 autoscaling:
