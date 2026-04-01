@@ -1,0 +1,65 @@
+name: Auto Infra Recovery
+
+on:
+  workflow_dispatch: # 수동 실행 트리거
+
+jobs:
+  recovery:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 1. AWS 자격 증명 설정
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    # 2. EKS 접속 설정
+    - name: Update kubeconfig
+      run: aws eks update-kubeconfig --region ap-northeast-2 --name portfolio-cluster
+
+    # 3. 모니터링 네임스페이스 및 Helm 저장소 설정
+    - name: Setup Monitoring Infrastructure
+      run: |
+        kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo update
+        # Prometheus & Grafana 설치 (이미 있으면 건너뜀)
+        helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
+          --namespace monitoring \
+          --set grafana.adminPassword=admin \
+          --wait
+
+    # 4. GitHub Secrets를 쿠버네티스 Secret으로 주입
+    - name: Create Kubernetes Secrets
+      run: |
+        kubectl create secret generic slack-secret \
+          --from-literal=webhook-url="${{ secrets.SLACK_WEBHOOK_URL }}" \
+          -n monitoring --dry-run=client -o yaml | kubectl apply -f -
+          
+        kubectl create secret generic gemini-secret \
+          --from-literal=api-key="${{ secrets.GEMINI_API_KEY }}" \
+          -n monitoring --dry-run=client -o yaml | kubectl apply -f -
+
+    # 5. 애플리케이션 및 자동화 도구 배포
+    - name: Deploy Apps and CronJobs
+      run: |
+        # API 서버 배포 (Helm)
+        helm upgrade --install my-api ./charts/my-api-chart \
+          --set image.tag=latest
+          
+        # AI 리포터 CronJob 등록
+        kubectl apply -f app/reporter-cronjob.yaml
+        
+        # Operator CRD 및 모니터링 연동
+        kubectl apply -f operators/status-operator/config/crd/bases/
+        kubectl apply -f operators/status-operator/config/prometheus/monitor.yaml
+
+    - name: Final Health Check
+      run: |
+        kubectl get pods -A
+        echo "🚀 인프라 복구가 완료되었습니다!"
