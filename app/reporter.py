@@ -27,15 +27,20 @@ def generate_ai_insight(cpu, mem, running, total):
     try:
         client = genai.Client(api_key=GEMINI_API_KEY)
         prompt = f"""
-        당신은 숙련된 SRE(Site Reliability Engineer)입니다. 
-        다음은 EKS 클러스터의 현재 메트릭입니다:
-        - CPU 사용률: {cpu}%
-        - 메모리 사용률: {mem}%
+        당신은 숙련된 SRE(Site Reliability Engineer)이자 FinOps(비용 최적화) 전문가입니다. 
+        현재 EKS 클러스터는 AWS 't3.small'(2 vCPU, 2GB RAM) 인스턴스 1대로 운영 중입니다.
+
+        [현재 메트릭]
+        - CPU 사용률: {cpu:.2f}%
+        - 메모리 사용률: {mem:.2f}%
         - Pod 상태: {running} / {total} (Running / Total)
 
-        이 데이터를 바탕으로 현재 시스템의 건강 상태를 진단하고, 
-        인프라 엔지니어에게 도움이 될 만한 인사이트를 한 줄로 짧고 멋지게 작성해 주세요. 
-        (친절하고 전문적인 말투 사용, 이모지 포함)
+        [분석 요청 사항]
+        1. 시스템 건강 상태 진단 (Pod 장애 여부 등)
+        2. 비용 최적화(FinOps) 제안: 
+           - 만약 사용률이 매우 낮다면(예: CPU < 15%) 더 저렴한 't3.micro'로 낮추거나 서버를 끌 것을 권장.
+           - 사용률이 높다면(예: CPU > 70%) 인스턴스 확장(Scaling)을 제안.
+        3. 인프라 엔지니어에게 도움이 될 만한 통찰력을 한 줄로 짧고 멋지게 작성 (전문적인 말투, 이모지 포함)
         """
         response = client.models.generate_content(
             model="gemini-3-flash-preview", 
