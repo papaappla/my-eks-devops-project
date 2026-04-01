@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ai-infra-reporter
+  namespace: monitoring
+spec:
+  schedule: "0 0 * * *" # 매일 UTC 0시 (한국시간 오전 9시)
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: reporter
+            image: 604048704500.dkr.ecr.ap-northeast-2.amazonaws.com/my-k8s-api:latest
+            command: ["python", "reporter.py"]
+            env:
+            - name: PROMETHEUS_URL
+              value: "http://prometheus-kube-prometheus-prometheus.monitoring:9090"
+            - name: SLACK_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: slack-secret
+                  key: webhook-url
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gemini-secret
+                  key: api-key
+          restartPolicy: OnFailure
+---
+# API Key를 저장할 Secret 예시 (실행 전 생성이 필요합니다)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gemini-secret
+  namespace: monitoring
+type: Opaque
+data:
+  # echo -n "YOUR_API_KEY" | base64 로 변환된 값이 들어가야 합니다.
+  api-key: "" 

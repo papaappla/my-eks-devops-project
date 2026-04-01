@@ -1,19 +1,15 @@
-# 기존: FROM python:3.9-slim
-# 변경:
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# (이하 동일)
-COPY requirements.txt .
-
-# 3. 필요한 라이브러리 설치
+# 1. 의존성 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 4. 소스 코드 복사
-COPY main.py .
+# 2. 모든 소스 코드 복사 (main.py, reporter.py 등)
+COPY . .
 
-# 5. API 포트 개방 및 실행
+# 3. 기본 실행은 main.py (FastAPI 서버)
+# CronJob에서는 'python reporter.py'로 오버라이드하여 실행합니다.
 EXPOSE 8000
-CMD ["python", "main.py"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
