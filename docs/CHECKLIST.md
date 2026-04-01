@@ -22,7 +22,7 @@
 | 상태 | 항목 | 상세 내용 및 기술적 요구사항 | 관련 파일 |
 | :---: | :--- | :--- | :--- |
 | ✅ | **Python 숙련도** | FastAPI 비동기 프로그래밍 및 운영 자동화 툴 개발 | `main.py` |
-| ⬜ | **Golang/C 숙련도** | 고성능/저수준 시스템 프로그래밍 및 오픈소스 기능 확장 | - |
+| ✅ | **Golang/C 숙련도** | 고성능/저수준 시스템 프로그래밍 및 오픈소스 기능 확장 | - |
 | ⬜ | **Inhouse Dev** | 오픈소스를 기반으로 사내 환경에 맞춘 기능 확장 및 성능 최적화 | - |
 | ✅ | **REST API Design** | 리소스 중심 API 설계 및 API 응답 속도 최적화 | `main.py` |
 | ⬜ | **OS/Kernel/Storage** | Linux 커널 아키텍처, 프로세스 스케줄링, 분산 스토리지(Ceph 등) 전문성 | - |
@@ -58,7 +58,7 @@
 | ✅ | **Helm Charts** | K8s 리소스 패키징 및 선언적 배포 관리 | `my-api-chart/` |
 | ⬜ | **ArgoCD** | GitOps 기반의 선언적 지속적 배포(CD) 환경 구축 | - |
 | ⬜ | **Access Control** | **Okta, Keycloak (SSO/EAM)** 연동 및 권한 분리/접근제어 | - |
-| ⬜ | **Observability** | **Prometheus, Grafana, ELK/OpenSearch** 기반 가시성 확보 | - |
+| ✅ | **Observability** | **Prometheus, Grafana, ELK/OpenSearch** 기반 가시성 확보 | `monitoring/`, `monitor.yaml` |
 | ⬜ | **Security Automation** | DevOps 관점의 보안 정책 수립 및 운영 자동화 | - |
 
 ---

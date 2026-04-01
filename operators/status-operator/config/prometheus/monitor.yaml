@@ -1,4 +1,3 @@
-# Prometheus Monitor Service (Metrics)
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -6,13 +5,17 @@ metadata:
     control-plane: controller-manager
     app.kubernetes.io/name: status-operator
     app.kubernetes.io/managed-by: kustomize
+    release: prometheus
   name: controller-manager-metrics-monitor
-  namespace: system
+  namespace: status-operator-system
 spec:
   endpoints:
     - path: /metrics
-      port: http # Ensure this is the name of the port that exposes HTTP metrics
-      scheme: http
+      port: https
+      scheme: https
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      tlsConfig:
+        insecureSkipVerify: true
   selector:
     matchLabels:
       control-plane: controller-manager
