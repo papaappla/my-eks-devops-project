@@ -78,8 +78,16 @@ def generate_report():
     return report_text
 
 def send_to_slack(text):
-    payload = {"text": text}
-    requests.post(SLACK_WEBHOOK_URL, data=json.dumps(payload), headers={'Content-Type': 'application/json'})
+    if not SLACK_WEBHOOK_URL:
+        print("SLACK_WEBHOOK_URL이 설정되지 않아 전송을 건너뜁니다.")
+        return
+    try:
+        payload = {"text": text}
+        # json 파라미터를 사용하면 requests가 알아서 utf-8로 인코딩하여 전송합니다.
+        response = requests.post(SLACK_WEBHOOK_URL, json=payload)
+        response.raise_for_status()
+    except Exception as e:
+        print(f"Slack 전송 중 오류 발생: {e}")
 
 if __name__ == "__main__":
     report = generate_report()

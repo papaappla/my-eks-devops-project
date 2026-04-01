@@ -12,6 +12,7 @@ spec:
           containers:
           - name: reporter
             image: 604048704500.dkr.ecr.ap-northeast-2.amazonaws.com/my-k8s-api:latest
+            imagePullPolicy: Always
             command: ["python", "reporter.py"]
             env:
             - name: PROMETHEUS_URL
