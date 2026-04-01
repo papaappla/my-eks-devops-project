@@ -2,23 +2,34 @@
 import requests
 import os
 import json
+import sys
 from datetime import datetime
 from google import genai
 
-# 설정
-PROMETHEUS_URL = os.getenv("PROMETHEUS_URL", "http://prometheus-kube-prometheus-prometheus.monitoring:9090")
-SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+# 시스템 출력 인코딩 강제 설정 (한글 깨짐 방지)
+if sys.stdout.encoding != 'utf-8':
+    try:
+        import codecs
+        sys.stdout = codecs.getwriter('utf-8')(sys.stdout.buffer, 'strict')
+        sys.stderr = codecs.getwriter('utf-8')(sys.stderr.buffer, 'strict')
+    except:
+        pass
+
+# 설정 (환경 변수 정제)
+PROMETHEUS_URL = os.getenv("PROMETHEUS_URL", "http://prometheus-kube-prometheus-prometheus.monitoring:9090").strip()
+SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL", "").strip()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 
 def get_prometheus_metric(query):
     try:
-        response = requests.get(f"{PROMETHEUS_URL}/api/v1/query", params={'query': query})
+        response = requests.get(f"{PROMETHEUS_URL}/api/v1/query", params={'query': query}, timeout=10)
+        response.raise_for_status()
         results = response.json()['data']['result']
         if results:
             return results[0]['value'][1]
         return "0"
     except Exception as e:
-        print(f"Error fetching metric: {e}")
+        print(f"Metric Fetch Error ({query[:20]}...): {e}")
         return "0"
 
 def generate_ai_insight(cpu, mem, running, total):
@@ -26,46 +37,55 @@ def generate_ai_insight(cpu, mem, running, total):
         return "Gemini API Key is missing. Infrastructure is stable."
 
     try:
-        client = genai.Client(api_key=GEMINI_API_KEY)
-        # 프롬프트를 영어로 구성하고 결과만 한글로 요청하여 인코딩 충돌 최소화
+        # API Key의 보이지 않는 문자를 제거하기 위해 다시 한번 strip()
+        client = genai.Client(api_key=GEMINI_API_KEY.replace('"', '').replace("'", "").strip())
+        
         prompt = f"""
-        Act as a Senior SRE and FinOps expert.
-        Analyze these EKS metrics (Instance: t3.small, 2 vCPU, 2GB RAM):
-        - CPU Usage: {cpu:.2f}%
-        - Memory Usage: {mem:.2f}%
-        - Pod Status: {running} / {total} (Running/Total)
-
-        Task:
-        1. Diagnose system health.
-        2. Provide FinOps advice (e.g., downgrade to t3.micro if CPU < 15%).
-        3. Write a 1-sentence insight in KOREAN with emojis for a Slack report.
+        Act as a Senior SRE. Analyze EKS metrics:
+        - CPU: {cpu:.2f}%
+        - Mem: {mem:.2f}%
+        - Pods: {running}/{total}
+        
+        Task: Write a 1-sentence infrastructure status report in KOREAN with emojis.
+        Focus on system health and cost optimization.
         """
+        
         response = client.models.generate_content(
             model="gemini-3-flash-preview", 
             contents=prompt
         )
-        insight = "".join([part.text for part in response.candidates[0].content.parts if part.text]).strip()
+        
+        # 텍스트 추출 시 발생할 수 있는 인코딩 문제 방지
+        insight_parts = [part.text for part in response.candidates[0].content.parts if part.text]
+        insight = "".join(insight_parts).strip()
         return insight
     except Exception as e:
-        # 에러 메시지도 영어로 출력하여 인코딩 에러 전파 방지
-        print(f"AI Generation Error: {str(e)}")
-        return f"AI Insight Error: {str(e)}"
+        # 에러 메시지에 유니코드가 포함될 수 있으므로 안전하게 처리
+        error_msg = str(e).encode('utf-8', 'ignore').decode('utf-8')
+        print(f"AI Generation Error: {error_msg}")
+        return f"AI Insight Generation failed. (Check API Key or Quota)"
 
 def generate_report():
-    cpu_usage = float(get_prometheus_metric('sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate) / sum(kube_node_status_allocatable:cpu:core) * 100'))
-    mem_usage = float(get_prometheus_metric('sum(container_memory_working_set_bytes) / sum(kube_node_status_allocatable:memory:bytes) * 100'))
-    total_pods = get_prometheus_metric('count(kube_pod_info)')
-    running_pods = get_prometheus_metric('count(kube_pod_status_phase{phase="Running"})')
+    # 더 범용적인 쿼리로 수정 (Node 기준)
+    cpu_query = 'avg(instance:node_cpu_utilization:ratio * 100) or vector(0)'
+    mem_query = 'avg(instance:node_memory_utilization:ratio * 100) or vector(0)'
+    total_pods_query = 'count(kube_pod_info) or vector(0)'
+    running_pods_query = 'count(kube_pod_status_phase{phase="Running"}) or vector(0)'
+
+    cpu_usage = float(get_prometheus_metric(cpu_query))
+    mem_usage = float(get_prometheus_metric(mem_query))
+    total_pods = int(float(get_prometheus_metric(total_pods_query)))
+    running_pods = int(float(get_prometheus_metric(running_pods_query)))
 
     ai_insight = generate_ai_insight(cpu_usage, mem_usage, running_pods, total_pods)
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    status_emoji = "✅" if cpu_usage < 80 else "⚠️"
+    status_emoji = "✅" if cpu_usage < 80 and running_pods == total_pods else "⚠️"
 
     report_text = f"""
 *🚀 [EKS AI Reporter] Infrastructure Analysis*
 --------------------------------------------------
 *📅 Date:* {now}
-*🌐 Status:* {status_emoji} Stable
+*🌐 Status:* {status_emoji} {'Stable' if status_emoji == "✅" else "Warning"}
 
 *📊 Metrics Summary:*
 • *CPU:* {cpu_usage:.2f}%
@@ -84,13 +104,13 @@ def send_to_slack(text):
         return
     try:
         payload = {"text": text}
-        response = requests.post(SLACK_WEBHOOK_URL, json=payload)
+        response = requests.post(SLACK_WEBHOOK_URL, json=payload, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Slack Error: {str(e)}")
+        print(f"Slack Error: {e}")
 
 if __name__ == "__main__":
     print("Starting AI Infrastructure Analysis...")
     report = generate_report()
     send_to_slack(report)
-    print("Report Sent Successfully!")
+    print("Process Finished Successfully!")
