@@ -2,4 +2,4 @@ fastapi
 uvicorn
 kubernetes
 requests
-google-genai
+google-generativeai
