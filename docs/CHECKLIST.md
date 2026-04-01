@@ -34,9 +34,9 @@
 | 상태 | 항목 | 상세 내용 및 기술적 요구사항 | 관련 파일 |
 | :---: | :--- | :--- | :--- |
 | ⬜ | **Real-time Interface** | **SSE, WebSocket** 기반 실시간 데이터/AI 답변 스트리밍 구현 | - |
-| ⬜ | **AI Agent Integration** | **MCP(Model Context Protocol), A2A** 연계 및 멀티 에이전트 구조 설계 | - |
+| ✅ | **AI Agent Integration** | **MCP(Model Context Protocol), A2A** 연계 및 멀티 에이전트 구조 설계 | `reporter.py` |
 | ⬜ | **BFF Architecture** | Frontend 최적화를 위한 BFF 계층 설계 및 경량 백엔드 구현 | - |
-| ⬜ | **Bot Interface** | **Slack Bot (Slack Bolt SDK)** 기반 멀티 플랫폼 인터페이스 개발 | - |
+| ✅ | **Bot Interface** | **Slack Bot (Slack Bolt SDK)** 기반 멀티 플랫폼 인터페이스 개발 | `reporter-cronjob.yaml` |
 | ⬜ | **Admin Tool/CMS** | Context DB 관리용 웹 인터페이스 및 AI 운영 도구 설계 | - |
 | ⬜ | **UX Optimization** | 응답 지연 처리, 실패/재시도 UX 설계 및 AI 결과 시각화 | - |
 
@@ -47,7 +47,7 @@
 | :---: | :--- | :--- | :--- |
 | ⬜ | **Database Transaction** | ACID 트랜잭션의 깊은 이해 및 대규모 트래픽 동시성 제어 | - |
 | ⬜ | **SQL & Statistics** | 복잡한 쿼리 작성 및 서비스 데이터 통계/분석 (SQL 전문성) | - |
-| ✅ | **Data Collection** | 플랫폼 관리 및 상태 모니터링을 위한 데이터 수집 자동화 | `main.py` |
+| ✅ | **Data Collection** | 플랫폼 관리 및 상태 모니터링을 위한 데이터 수집 자동화 | `main.py`, `reporter.py` |
 
 ---
 
@@ -59,7 +59,7 @@
 | ⬜ | **ArgoCD** | GitOps 기반의 선언적 지속적 배포(CD) 환경 구축 | - |
 | ⬜ | **Access Control** | **Okta, Keycloak (SSO/EAM)** 연동 및 권한 분리/접근제어 | - |
 | ✅ | **Observability** | **Prometheus, Grafana, ELK/OpenSearch** 기반 가시성 확보 | `monitoring/`, `monitor.yaml` |
-| ⬜ | **Security Automation** | DevOps 관점의 보안 정책 수립 및 운영 자동화 | - |
+| ✅ | **Security Automation** | DevOps 관점의 보안 정책 수립 및 운영 자동화 | `gemini-secret`, `slack-secret` |
 
 ---
 
